@@ -70,6 +70,72 @@ kubectl get services -n development
  kubectl scale deployment frontend --replicas=5
  ```
 
+## Install and configure helm
+Install Helm CLI tool using followig command:
+```
+	cd ~/environment
+	curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
+	chmod +x get_helm.sh
+	./get_helm.sh
+```
+Configure Helm access with RBAC
+
+	Helm relies on a service called tiller that requires special permission on the kubernetes cluster, so we need to build a Service Account for tiller to use. We’ll then apply this to the cluster.
+	
+	To create a new service account manifest:
+```
+cat <<EoF > helm-rbac.yaml
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tiller
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: tiller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: tiller
+    namespace: kube-system
+EoF
+```
+	
+```kubectl apply -f helm-rbac.yaml```
+
+Verify helm version
+```helm version```
+
+## Install Jenkins on Centos 7
+	```
+		# install JAVA
+		sudo yum install java-1.8.0-openjdk-devel
+		#Configure YUM Repo
+		curl --silent --location http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo | sudo tee /etc/yum.repos.d/jenkins.repo
+		sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
+		# install jenkins
+		sudo yum install jenkins
+		# configure jenkins service
+		sudo systemctl start jenkins
+		sudo systemctl status jenkins
+		sudo systemctl enable jenkins
+		# Configure Firewall rules
+		sudo firewall-cmd --permanent --zone=public --add-port=8080/tcpsudo 
+		firewall-cmd --reload
+	```
+## Application CI/CD using Helm
+Please refer follwoing jenkins file
+https://github.com/anandnevase/bday-app/blob/master/jenkinsfile-k8s
+
+Detail explanation of application and its CI/CD process mention in following link:
+https://github.com/anandnevase/bday-app
+
 ## EFK configuration
 
 ##### Deploy Elasticsearch
@@ -147,72 +213,6 @@ Access Kibana quickly through port-forwarding
 kubectl port-forward kibana-6f75b4fdcf-9qbp7 5601
 ```
 	
-## Install and configure helm
-Install Helm CLI tool using followig command:
-```
-	cd ~/environment
-	curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
-	chmod +x get_helm.sh
-	./get_helm.sh
-```
-Configure Helm access with RBAC
-
-	Helm relies on a service called tiller that requires special permission on the kubernetes cluster, so we need to build a Service Account for tiller to use. We’ll then apply this to the cluster.
-	
-	To create a new service account manifest:
-```
-cat <<EoF > helm-rbac.yaml
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: tiller
-  namespace: kube-system
----
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRoleBinding
-metadata:
-  name: tiller
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
-subjects:
-  - kind: ServiceAccount
-    name: tiller
-    namespace: kube-system
-EoF
-```
-	
-```kubectl apply -f helm-rbac.yaml```
-
-Verify helm version
-```helm version```
-
-## Install Jenkins on Centos 7
-	```
-		# install JAVA
-		sudo yum install java-1.8.0-openjdk-devel
-		#Configure YUM Repo
-		curl --silent --location http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo | sudo tee /etc/yum.repos.d/jenkins.repo
-		sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
-		# install jenkins
-		sudo yum install jenkins
-		# configure jenkins service
-		sudo systemctl start jenkins
-		sudo systemctl status jenkins
-		sudo systemctl enable jenkins
-		# Configure Firewall rules
-		sudo firewall-cmd --permanent --zone=public --add-port=8080/tcpsudo 
-		firewall-cmd --reload
-	```
-## Application CI/CD using Helm
-Please refer follwoing jenkins file
-https://github.com/anandnevase/bday-app/blob/master/jenkinsfile-k8s
-
-Detail explanation of application and its CI/CD process mention in following link:
-https://github.com/anandnevase/bday-app
-
 ## Blue Green deployment
 
 create Blue-Green namespace
