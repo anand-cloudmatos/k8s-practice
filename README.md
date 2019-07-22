@@ -1,8 +1,7 @@
 # k8s-practice
-# k8s Cluster Installation
-========================
-# Prerequisites
-========================
+
+## k8s Cluster Installation
+##### Prerequisites
 1. You need a Google Cloud Platform account with billing enabled. Visit the Google Developers Console for more details.
 2. Install gcloud as necessary. gcloud can be installed as a part of the Google Cloud SDK.
 3. Enable the Compute Engine Instance Group Manager API in the Google Cloud developers console.
@@ -10,87 +9,104 @@
 5. Make sure you have credentials for GCloud by running gcloud auth login.
 6. (Optional) In order to make API calls against GCE, you must also run gcloud auth application-default login.
 7. Make sure you can start up a GCE VM from the command line. 
-==================
-# Starting a cluster
-==================
-You can install a client and start a cluster with either one of these commands (we list both in case only one is installed on your machine):
 
+##### Starting a cluster
+
+You can install a client and start a cluster with either one of these commands (we list both in case only one is installed on your machine):
+```
 	curl -sS https://get.k8s.io | bash
 	or
 	wget -q -O - https://get.k8s.io | bash
-	
+```	
 run the <kubernetes>/cluster/kube-up.sh script to start the cluster:
+	```
 	cd kubernetes
 	cluster/kube-up.sh
-
+	```
 Verify cluster using kubectl command
-	kubectl cluster-info
+	```kubectl cluster-info```
 	
-=============
-# Deploy Guest Application id developemt namespace
-=============
-kubectl create namespace deployment
-# Install Redis master
+## Deploy Guest Application developemt namespace
+Create development namespace
+```kubectl create namespace deployment```
+##### Install Redis master
+```
 kubectl apply -f https://k8s.io/examples/application/guestbook/redis-master-deployment.yaml -n development
 kubectl get pods -n development
 kubectl logs -f POD-NAME -n development
-# install redis master service
+```
+#### install redis master service
+```
 kubectl apply -f https://k8s.io/examples/application/guestbook/redis-master-service.yaml -n development
 kube get svc -n development
-# install redis salve
+```
+##### install redis salve
+```
 kubectl apply -f https://k8s.io/examples/application/guestbook/redis-slave-deployment.yaml -n development
 kubectl get pods -n development
-# install redis slave service
+```
+##### install redis slave service
+```
 kubectl apply -f https://k8s.io/examples/application/guestbook/redis-slave-service.yaml -n development
-
-# install guestbook
+```
+##### install guestbook
+```
 kubectl apply -f https://k8s.io/examples/application/guestbook/frontend-deployment.yaml -n development
 kubectl get pods -l app=guestbook -l tier=frontend -n development
-
-#install guest book service
+```
+##### install guest book service
+```
 kubectl apply -f https://k8s.io/examples/application/guestbook/frontend-service.yaml -n development
-# make frontend-service to loadbalance instead of Node-port, edit file and change type: LoadBalancer
+```
+##### make frontend-service to loadbalance instead of Node-port, edit file and change type: LoadBalancer
+```
 kubectl edit svc frontend -n development
-
 kubectl get services -n development
-#Copy the external IP address, and load the page in your browser to view your guestbook.
+```
+##### Copy the external IP address, and load the page in your browser to view your guestbook.
 
-# scaling up frontend
+ scaling up frontend
+ ```
  kubectl scale deployment frontend --replicas=5
-==============
-#ELK configuration
-=================
+ ```
+
+## ELK configuration
 Create a cluster level role binding so that you can deploy kube-state-metrics and the Beats at the cluster level (in kube-system).
+```
 	kubectl create clusterrolebinding cluster-admin-binding \
 	 --clusterrole=cluster-admin --user=<your email associated with the k8s provider account>
-
-#Install kube-state-metrics
---------------------------
+```
+##### Install kube-state-metrics
 Check to see if kube-state-metrics is running
-		kubectl get pods --namespace=kube-system | grep kube-state
+```	
+	kubectl get pods --namespace=kube-system | grep kube-state
+```
 Install kube-state-metrics if needed
+```
 	git clone https://github.com/kubernetes/kube-state-metrics.git kube-state-metrics
 	kubectl create -f kube-state-metrics/kubernetes
 	kubectl get pods --namespace=kube-system | grep kube-state
+```
 
 Verify that kube-state-metrics is running and ready
+```
 	kubectl get pods -n kube-system -l k8s-app=kube-state-metrics
-
+```
 	
-===============================	 
-# Install and configure helm
-------------------
+## Install and configure helm
 Install Helm CLI tool using followig command:
+```
 	cd ~/environment
 	curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
 	chmod +x get_helm.sh
 	./get_helm.sh
-
+```
 Configure Helm access with RBAC
 
 	Helm relies on a service called tiller that requires special permission on the kubernetes cluster, so we need to build a Service Account for tiller to use. We’ll then apply this to the cluster.
 	
 	To create a new service account manifest:
+```
 cat <<EoF > helm-rbac.yaml
 ---
 apiVersion: v1
@@ -112,16 +128,14 @@ subjects:
     name: tiller
     namespace: kube-system
 EoF
-
+```
 	
 ```kubectl apply -f helm-rbac.yaml```
 
 Verify helm version
 ```helm version```
 
-===========================
-# Install Jenkins on Centos 7
-===========================	
+## Install Jenkins on Centos 7
 	```
 		# install JAVA
 		sudo yum install java-1.8.0-openjdk-devel
@@ -138,87 +152,100 @@ Verify helm version
 		sudo firewall-cmd --permanent --zone=public --add-port=8080/tcpsudo 
 		firewall-cmd --reload
 	```
-===========================
-# Install Monitoring Services
-===========================	
-# create monitoring namespace
+
+## Install Monitoring Services
+
+##### create monitoring namespace
+```
 kubectl create ns monitoring
-# install prometheus using Helm
+```
+##### install prometheus using Helm
+```
 helm install --name prometeus  stable/prometheus --namespace monitoring
+```
 
+## Blue Green deployment
 
-==========================
-Blue Green deployment
-==========================
-# create Blue-Green namespace
+create Blue-Green namespace
+```
 kubectl create ns blue-green
-#Deploy Blue version of application
+```
+Deploy Blue version of application
+```
 DEPLOYMENT=blue IMAGE="hanzel/nginx-html" IMAGE_TAG="1" APP="nginx" envsubst < deployment.yaml | kubectl apply -n blue-green -f -
 DEPLOYMENT=blue APP="nginx" envsubst < service.yaml | kubectl apply -n blue-green -f -
+```
 
-# Deploy Green Version of application
+ Deploy Green Version of application
+```
 DEPLOYMENT=green IMAGE="hanzel/nginx-html" IMAGE_TAG="2" APP="nginx" envsubst < deployment.yaml | kubectl apply -n blue-green -f -
 DEPLOYMENT=green APP="nginx" envsubst < service.yaml | kubectl apply -n blue-green -f -
-
-#Switching between Blue and Green Deployments:
-#Change the “selector -> color” from “blue” to “green”. Save the file.
+```
+Switching between Blue and Green Deployments:
+Change the “selector -> color” from “blue” to “green”. Save the file.
+```
 kubectl edit -n blue-green service nginx-blue
+```
 
+## Canary deployment
 
-==========================
-Canary deployment
-==========================
-# create Blue-Green namespace
+ create Blue-Green namespace
+```
 kubectl create ns canary
-#Deploy prod version application
+```
+Deploy prod version application
+```
 ENV=prod IMAGE="hanzel/nginx-html" IMAGE_TAG="1" APP="nginx" envsubst < deployment.yaml | kubectl apply -n canary -f -
+```
 
-# deploy canary version
+deploy canary version
+```
 ENV=canary IMAGE="hanzel/nginx-html" IMAGE_TAG="2" APP="nginx" envsubst < deployment.yaml | kubectl apply -n canary -f -
-
-
-
 ENV=prod APP="nginx" envsubst < ingress.yaml
+```
 
-===================
-Monitoring
-===================
+## Monitoring
 Create Monitoring namespace
 ```kubectl create ns monitoring```
 
 # First we need to update our local helm chart repo.
 ```$ helm repo update```
 
-Next, deploy Prometheus into the monitoring namespace
+##### install Prometheus into the monitoring namespace
+```
 $ helm install stable/prometheus \
     --namespace monitoring \
     --name prometheus
+```
 This will deploy Prometheus into your cluster in the monitoring namespace and mark the release with the name prometheus.
 Prometheus is now scraping the cluster together with the node-exporter and collecting metrics from the nodes.
 We can confirm by checking that the pods are running:
 
 ```kubectl get pods -n monitoring```
 
-# install Grafana
+##### Install Grafana
+```
 kubectl apply -f monitoring/grafana/config.yml
 
 helm install stable/grafana \
     -f monitoring/grafana/values.yml \
     --namespace monitoring \ 
     --name grafana
-	
+```	
 GET Grafana PASSWORD:
+```
 kubectl get secret \
     --namespace monitoring grafana \
     -o jsonpath="{.data.admin-password}" \
     | base64 --decode ; echo
-# username: admin
-# password: SDJkSyjOTFxvLuX1MOluF4k55AzDcSxyIhLbStuq
+```
+
 
 Port Forward the Grafana dashboard to see whats happening:
+```
 export POD_NAME=$(kubectl get pods --namespace monitoring -l "app=grafana,release=grafana" -o jsonpath="{.items[0].metadata.name}")
 $ kubectl --namespace monitoring port-forward $POD_NAME 3000
-
+```
 1. Login to Grafana using admin credentials
 2. Add a dashboard
 3. In the left hand menu, choose Dashboards > Manage > + Import
