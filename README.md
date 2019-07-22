@@ -172,14 +172,14 @@ kubectl create ns blue-green
 ```
 Deploy Blue version of application
 ```
-DEPLOYMENT=blue IMAGE="hanzel/nginx-html" IMAGE_TAG="1" APP="nginx" envsubst < deployment.yaml | kubectl apply -n blue-green -f -
-DEPLOYMENT=blue APP="nginx" envsubst < service.yaml | kubectl apply -n blue-green -f -
+DEPLOYMENT=blue IMAGE="hanzel/nginx-html" IMAGE_TAG="1" APP="nginx" envsubst < blue-green-deployment/deployment.yaml | kubectl apply -n blue-green -f -
+DEPLOYMENT=blue APP="nginx" envsubst < blue-green-deployment/service.yaml | kubectl apply -n blue-green -f -
 ```
 
  Deploy Green Version of application
 ```
-DEPLOYMENT=green IMAGE="hanzel/nginx-html" IMAGE_TAG="2" APP="nginx" envsubst < deployment.yaml | kubectl apply -n blue-green -f -
-DEPLOYMENT=green APP="nginx" envsubst < service.yaml | kubectl apply -n blue-green -f -
+DEPLOYMENT=green IMAGE="hanzel/nginx-html" IMAGE_TAG="2" APP="nginx" envsubst < blue-green-deployment/deployment.yaml | kubectl apply -n blue-green -f -
+DEPLOYMENT=green APP="nginx" envsubst < blue-green-deployment/service.yaml | kubectl apply -n blue-green -f -
 ```
 Switching between Blue and Green Deployments:
 Change the “selector -> color” from “blue” to “green”. Save the file.
@@ -195,23 +195,22 @@ kubectl create ns canary
 ```
 Deploy prod version application
 ```
-ENV=prod IMAGE="hanzel/nginx-html" IMAGE_TAG="1" APP="nginx" envsubst < deployment.yaml | kubectl apply -n canary -f -
+ENV=prod IMAGE="hanzel/nginx-html" IMAGE_TAG="1" APP="nginx" envsubst < canary-deployment/deployment.yaml | kubectl apply -n canary -f -
 ```
 
 deploy canary version
 ```
-ENV=canary IMAGE="hanzel/nginx-html" IMAGE_TAG="2" APP="nginx" envsubst < deployment.yaml | kubectl apply -n canary -f -
-ENV=prod APP="nginx" envsubst < ingress.yaml
+ENV=canary IMAGE="hanzel/nginx-html" IMAGE_TAG="2" APP="nginx" envsubst < canary-deployment/deployment.yaml | kubectl apply -n canary -f -
 ```
 
 ## Monitoring
 Create Monitoring namespace
 ```kubectl create ns monitoring```
 
-# First we need to update our local helm chart repo.
+##### First we need to update our local helm chart repo.
 ```$ helm repo update```
 
-##### install Prometheus into the monitoring namespace
+##### Install Prometheus into the monitoring namespace
 ```
 $ helm install stable/prometheus \
     --namespace monitoring \
