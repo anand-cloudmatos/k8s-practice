@@ -1,0 +1,8 @@
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: ${APP}-ingress
+spec:
+  backend:
+    serviceName: ${APP}-${ENV}-service
+    servicePort: 80
