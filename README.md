@@ -152,17 +152,12 @@ Verify helm version
 		sudo firewall-cmd --permanent --zone=public --add-port=8080/tcpsudo 
 		firewall-cmd --reload
 	```
+## Application CI/CD using Helm
+Please refer follwoing jenkins file
+https://github.com/anandnevase/bday-app/blob/master/jenkinsfile-k8s
 
-## Install Monitoring Services
-
-##### create monitoring namespace
-```
-kubectl create ns monitoring
-```
-##### install prometheus using Helm
-```
-helm install --name prometeus  stable/prometheus --namespace monitoring
-```
+Detail explanation of application and its CI/CD process mention in following link:
+https://github.com/anandnevase/bday-app
 
 ## Blue Green deployment
 
