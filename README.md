@@ -70,27 +70,81 @@ kubectl get services -n development
  kubectl scale deployment frontend --replicas=5
  ```
 
-## ELK configuration
-Create a cluster level role binding so that you can deploy kube-state-metrics and the Beats at the cluster level (in kube-system).
+## EFK configuration
+
+##### Deploy Elasticsearch
+
 ```
-	kubectl create clusterrolebinding cluster-admin-binding \
-	 --clusterrole=cluster-admin --user=<your email associated with the k8s provider account>
+kubectl create ns logging
 ```
-##### Install kube-state-metrics
-Check to see if kube-state-metrics is running
-```	
-	kubectl get pods --namespace=kube-system | grep kube-state
+Helm installation of Elasticsearch. We will disable persistence for simplicity. Warning this will consume a lot of memory in your cluster.
+
 ```
-Install kube-state-metrics if needed
-```
-	git clone https://github.com/kubernetes/kube-state-metrics.git kube-state-metrics
-	kubectl create -f kube-state-metrics/kubernetes
-	kubectl get pods --namespace=kube-system | grep kube-state
+helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com/
+helm install --name elasticsearch incubator/elasticsearch \
+    --set master.persistence.enabled=false \
+    --set data.persistence.enabled=false \
+    --set image.tag=6.4.2 \
+    --namespace logging
 ```
 
-Verify that kube-state-metrics is running and ready
+##### Deploy Kibana
+If you used Elasticsearch deployment 
 ```
-	kubectl get pods -n kube-system -l k8s-app=kube-state-metrics
+helm install --name kibana stable/kibana \
+    --set env.ELASTICSEARCH_URL=http://elasticsearch-client:9200 \
+    --set image.tag=6.4.2 \
+    --namespace logging
+```
+
+##### Deploy Fluent Bit
+
+** Create the RBAC resources for Fluent Bit **
+```
+kubectl apply -f https://raw.githubusercontent.com/fluent/fluent-bit-kubernetes-logging/master/fluent-bit-service-account.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/fluent/fluent-bit-kubernetes-logging/master/fluent-bit-role.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/fluent/fluent-bit-kubernetes-logging/master/fluent-bit-role-binding.yaml
+```
+
+** Create the Fluent Bit Config Map **
+```
+kubectl apply -f https://raw.githubusercontent.com/fluent/fluent-bit-kubernetes-logging/master/output/elasticsearch/fluent-bit-configmap.yaml
+```
+
+** Deploy the Fluent Bit DaemonSet **
+```
+wget https://raw.githubusercontent.com/fluent/fluent-bit-kubernetes-logging/master/output/elasticsearch/fluent-bit-ds.yaml
+# modify as recommended, then:
+kubectl apply -f https://raw.githubusercontent.com/fluent/fluent-bit-kubernetes-logging/master/output/elasticsearch/fluent-bit-ds.yaml
+```
+
+** Check if everything is running **
+```
+kubectl get pods -n logging
+NAME                             READY     STATUS    RESTARTS   AGE
+elasticsearch-78987949dc-7wj8m   1/1       Running   0          1d
+fluent-bit-2dv5n                 1/1       Running   7          1d
+kibana-6f75b4fdcf-9qbp7     
+```
+
+** Populate logs **
+Deploy an example Nginx container and port-forward the traffic to your localhost.
+```
+kubectl run nginx --image=nginx -n logging
+
+kubectl port-forward nginx-8586cf59-kpbf6 8081:80 &
+```
+Curl it a few times, and press Ctrl+C when done.
+```
+while true; do curl localhost:8081; sleep 2; done
+```
+
+** Viewing Logs in Kibana **
+Access Kibana quickly through port-forwarding
+```
+kubectl port-forward kibana-6f75b4fdcf-9qbp7 5601
 ```
 	
 ## Install and configure helm
