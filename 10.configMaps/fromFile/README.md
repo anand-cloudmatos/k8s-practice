@@ -1,25 +1,20 @@
 ## Deploy Pod using config-map-from-file on Openshift/k8s
 
-### 1. Create new project config-map-from-file
-```bash
-$ kubectl create ns config-map-from-file
-Now using project "config-map-from-file" on server "https://2886795320-8443-cykoria05.environments.katacoda.com:443".
-```
 
-### 2. Create new project config-map from file
+### Create  config-map from file
 ```bash
 $ kubectl create configmap color-config-map-file --from-file=testfile.txt -n config-map-from-file
 configmap/color-config-map-file created
 ```
 
-### 3. Get configMap config-map-from-file 
+### Get configMap config-map-from-file 
 ```bash
 $ kubectl get configmap -n config-map-from-file
 NAME                    DATA   AGE
 color-config-map-file   1      16s
 ```
 
-### 4. Describe config-map-from-file
+### Describe config-map-from-file
 ```bash
 $ kubectl describe configmap color-config-map-file -n config-map-from-file
 Name:         color-config-map-file
@@ -35,20 +30,20 @@ Hello  - ConfigMap from File
 Events:  <none>
 ```
 
-### 5. Create POD
+### Create POD
 ```bash
 $ kubectl create -f pod.yml -n config-map-from-file
 pod/color-app created
 ```
 
-### 6. Get POD
+### Get POD
 ```bash
 $ kubectl get pods -n config-map-from-file
 NAME        READY   STATUS    RESTARTS   AGE
 color-app   1/1     Running   0          8s
 ```
 
-### 7. Describe POD
+### Describe POD
 ```bash
 $ kubectl describe pod color-app -n config-map-from-file
 Name:         color-app
@@ -104,12 +99,17 @@ Events:
   Normal  Started    <invalid>  kubelet, master    Started container
 ```
 
-### 8. create service
+### create service
 ```bash
 $ kubectl expose pod/color-app -n config-map-from-file
 service/color-app exposed
 ```
 
-### 9. Access route url browser
+### Access route url browser
 Access following url, You will observer you can able to see file which is store in configMap
 http://color-app-config-map-from-file.2886795276-80-host18nc.environments.katacoda.com/read_file
+
+### Delete All
+```bash
+$ kubectl delete all --all
+```

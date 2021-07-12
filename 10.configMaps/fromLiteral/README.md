@@ -1,24 +1,24 @@
 ## Deploy Pod using config-map-from-literals on Openshift/k8s
 
-### 1. Create new project config-map-from-literals
+### Create new project config-map-from-literals
 ```bash
 $ kubectl create ns config-map-from-literals
 Now using project "config-map-from-literals" on server "https://2886795320-8443-cykoria05.environments.katacoda.com:443".
 ```
 
-### 2. create config-map from literals
+### create config-map from literals
 ```bash
-$ kubectl apply -f pod.yml -n  config-map-from-literals
+$ kubectl apply -f pod.yml 
 error: error parsing pod.yml: error converting YAML to JSON: yaml: line 9: mapping values are not allowed in this context
 
-$ kubectl create configmap color-config-map --from-literal=APP_COLOR=red -n  config-map-from-literals
+$ kubectl create configmap color-config-map --from-literal=APP_COLOR=red 
 configmap/color-config-map created
 
-$ kubectl get configmap -n  config-map-from-literals
+$ kubectl get configmap 
 NAME               DATA   AGE
 color-config-map   1      5s
 
-$ kubectl describe configmap color-config-map -n  config-map-from-literals
+$ kubectl describe configmap color-config-map 
 Name:         color-config-map
 Namespace:    config-map-from-literals
 Labels:       <none>
@@ -32,18 +32,23 @@ red
 Events:  <none>
 ```
 
-### 3. create POD
+### create POD
 ```bash
-$ kubectl apply -f pod.yml -n  config-map-from-literals
+$ kubectl apply -f pod.yml 
 pod/color-app created
 ```
 
-### 4. create service
+### create service
 ```bash
-$ kubectl expose pod/color-app -n  config-map-from-literals
+$ kubectl expose pod/color-app 
 service/color-app exposed
 ```
 
-###  5. Accees application
+###  Accees application
 - using URL : color-app-config-map-from-literals.2886795320-80-cykoria05.environments.katacoda 
   HTML RED color Page, because in config map value of APP_COLOR is RED
+
+  ### Delete All
+```bash
+$ kubectl delete all --all
+```

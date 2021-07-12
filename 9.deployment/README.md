@@ -1,42 +1,37 @@
 ## Deploy Deployment on Openshift/k8s
 
-### 1. Create new project deployment
-```bash
-$ kubectl create ns deployment
-Now using project "deployment" on server "https://2886795278-8443-cykoria05.environments.katacoda.com:443".
-```
 
-### 2. Create  deployment
+### Create  deployment
 ```bash
-$ kubectl apply -f deployment.yml -n deployment
+$ kubectl apply -f deployment.yml 
 deployment.apps/nginx created
 service/nginx unchanged
 ```
 
-### 3. Get Pod
+### Get Pod
 ```bash
-$ kubectl get pods -n deployment
+$ kubectl get pods 
 NAME                     READY   STATUS              RESTARTS   AGE
 nginx-7dc5879c84-7ft4q   0/1     ContainerCreating   0          5s
 nginx-7dc5879c84-ch6rj   0/1     ContainerCreating   0          5s
 
-$ kubectl get pods -n deployment
+$ kubectl get pods 
 NAME                     READY   STATUS    RESTARTS   AGE
 nginx-7dc5879c84-7ft4q   1/1     Running   0          30s
 nginx-7dc5879c84-ch6rj   1/1     Running   0          30s
 ```
 
-### 4. Get deployment
+### Get deployment
 ```bash
-$ kubectl get deployment -n deployment
+$ kubectl get deployment 
 NAME    DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 nginx   2         2         2            2           55s
 
 ```
 
-### 5. Get all
+### Get all
 ```bash
-$ kubectl get all -n deployment
+$ kubectl get all 
 NAME                         READY   STATUS    RESTARTS   AGE
 pod/nginx-58f688455d-6nw9d   1/1     Running   0          11s
 pod/nginx-58f688455d-dwgb5   1/1     Running   0          11s
@@ -49,4 +44,9 @@ deployment.apps/nginx   2         2         2            2           14s
 
 NAME                               DESIRED   CURRENT   READY   AGE
 replicaset.apps/nginx-58f688455d   2         2         2       14s
+```
+
+### Delete All
+```bash
+$ kubectl delete all --all
 ```

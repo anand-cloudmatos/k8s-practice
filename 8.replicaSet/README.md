@@ -1,26 +1,21 @@
 ## Deploy ReplicaSet on Openshift/k8s
 
-### 1. Create new project replica-set
+### Create replica-set
 ```bash
-$ kubectl create ns replica-set
-Now using project "replica-set"
-```
-### 2. Create replica-set
-```bash
-$ kubectl apply -f replicaSet.yml -n replica-set
+$ kubectl apply -f replicaSet.yml 
 replicaset.apps/hello-rs created
 ```
 
-### 3. GEt replica-set
+### GEt replica-set
 ```bash
-$ kubectl get rs -n replica-set
+$ kubectl get rs 
 NAME       DESIRED   CURRENT   READY   AGE
 hello-rs   2         2         2       16s
 ```
 
-### 4. Describe replica-set
+### Describe replica-set
 ```bash
-$ kubectl describe rs hello-rs -n replica-set
+$ kubectl describe rs hello-rs 
 Name:         hello-rs
 Namespace:    replica-set
 Selector:     app=hello,tier in (backend)
@@ -47,30 +42,30 @@ Events:
   Normal  SuccessfulCreate  <invalid>  replicaset-controller  Created pod: hello-rs-7vr79
 ```
 
-### 5. Scale replica-set to 5
+### Scale replica-set to 5
 ```bash
-$ kubectl scale rs hello-rs --replicas=5 -n replica-set
+$ kubectl scale rs hello-rs --replicas=5 
 replicaset.extensions/hello-rs scaled
 ```
 
-### 6. Get REplica set
+### Get REplica set
 ```bash
-$ kubectl get rs -n replica-set
+$ kubectl get rs 
 NAME       DESIRED   CURRENT   READY   AGE
 hello-rs   5         5         2       1m
 
-$ kubectl get rs -n replica-set
+$ kubectl get rs 
 NAME       DESIRED   CURRENT   READY   AGE
 hello-rs   5         5         4       1m
 
-$ kubectl get rs -n replica-set
+$ kubectl get rs 
 NAME       DESIRED   CURRENT   READY   AGE
 hello-rs   5         5         5       1m
 ```
 
-### 7. Get Pod
+### Get Pod
 ```bash
-$ kubectl get pods -n replica-set
+$ kubectl get pods 
 NAME             READY   STATUS    RESTARTS   AGE
 hello-rs-7vr79   1/1     Running   0          1m
 hello-rs-ddw6x   1/1     Running   0          17s
@@ -79,9 +74,9 @@ hello-rs-lpvv5   1/1     Running   0          1m
 hello-rs-zzdfs   1/1     Running   0          17s
 ```
 
-### 8. Create Service and display Yaml file using command
+### Create Service and display Yaml file using command
 ```bash
-$ kubectl expose rs hello-rs --port=8080  --selector='app=hello' -o yaml -n replica-set
+$ kubectl expose rs hello-rs --port=8080  --selector='app=hello' -o yaml 
 apiVersion: v1
 kind: Service
 metadata:
@@ -98,22 +93,27 @@ status:
   loadBalancer: {}
 ```
 
-### 9. Get Service
+### Get Service
 ```bash
-$ kubectl get svc -n replica-set
+$ kubectl get svc 
 NAME    TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
 hello   ClusterIP   172.30.51.95   <none>        8080/TCP   49s
 ```
 
-### 10. check application using route url
+### check application using route url
 ```bash
 $ curl <cluster-ip>:8080
 Hello OpenShift!
 ```
 
-### 11. Delete Replica Set
+### Delete Replica Set
 ```bash
 
-$ kubectl delete rs hello-rs -n replica-set
+$ kubectl delete rs hello-rs 
 replicaset.extensions "hello-rs" deleted
+```
+
+### Delete All
+```bash
+$ kubectl delete all --all
 ```

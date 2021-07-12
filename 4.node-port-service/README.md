@@ -1,18 +1,15 @@
 ## Deploy LoadBalancer Service on Openshift/k8s
 
-### Create new project node-prot
-```bash
-$ kubectl create ns node-port  
-```
+
 ### Create pod and service
 ```
-$ kubectl create -f .\app.yml -n node-port 
+$ kubectl create -f .\app.yml 
 pod/hello-pod created
 service/hello-nodeport created
 ```
 ### Get all object
 ```
-$ kubectl get all  -n node-port 
+$ kubectl get all  
 NAME            READY   STATUS    RESTARTS   AGE
 pod/hello-pod   1/1     Running   0          42s
 

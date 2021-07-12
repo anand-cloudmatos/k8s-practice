@@ -1,39 +1,34 @@
 ## Deploy ClusterIP Service on Openshift/k8s
 
-### Create new project cluster-ip-service
-```bash
- $ kubectl create ns cluster-ip-service    
-```
-
 ### Create pod
 ```bash
-$ kubectl create -f .\pod.yml -n cluster-ip-service
+$ kubectl create -f .\pod.yml 
   pod/hello-pod created
 ```
 
 ### GET pod
 ```bash  
-$ kubectl get pods  -n cluster-ip-service         
+$ kubectl get pods           
 NAME        READY   STATUS    RESTARTS   AGE
 hello-pod   1/1     Running   0          11s
 ```
 
 ### Create Service
 ``` bash
-$ kubectl create -f .\service.yml -n cluster-ip-service    
+$ kubectl create -f .\service.yml     
 service/hello-svc created
 ```
 
 ### GET service
 ``` bash
-$ kubectl get service   -n cluster-ip-service   
+$ kubectl get service      
 NAME        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
 hello-svc   ClusterIP   172.30.203.182   <none>        8080/TCP   19s
 ```
 
 ### Describe pod
 ```
-$ kubectl describe service hello-svc  -n cluster-ip-service       
+$ kubectl describe service hello-svc         
 Name:              hello-svc
 Namespace:         cluster-ip-service
 Labels:            <none>
@@ -64,7 +59,7 @@ Hello OpenShift!!
 
 ### Create Service 2
 ```
-$ kubectl create -f .\service.yml -n cluster-ip-service                                                                                   
+$ kubectl create -f .\service.yml                                                                                    
 service/hello-svc2 created
 Error from server (AlreadyExists): error when creating ".\\service.yml": services "hello-svc" already exists
 ```
@@ -108,4 +103,10 @@ $  curl http://172.30.203.182:9090
 curl: (7) Failed connect to 172.30.203.182:9090; No route to host
 $  curl http://172.30.128.219:9090
 Hello OpenShift!
+```
+
+
+### Delete All
+```bash
+$ kubectl delete all --all
 ```

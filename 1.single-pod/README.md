@@ -1,69 +1,60 @@
 ## Deploy single pod on Openshift/k8s using kubectl run
 
-### Create new project single-pod
+### Create hello pod using kubectl run command
 ```bash
-$ kubectl create ns single-pod
+$ kubectl run hello --image=openshift/hello-openshift --restart=Never 
 ```
-
-### Create nginx pod using kubectl run command
+### Check hello POD created
 ```bash
-$ kubectl run hello --image=nginx --restart=Never -n single-pod
-```
-### 4. Check nginx POD created
-```bash
-$ kubectl get pod -n single-pod
+$ kubectl get pod 
 NAME    READY   STATUS              RESTARTS   AGE
-nginx   0/1     ContainerCreating   0          4s
+hello   0/1     ContainerCreating   0          4s
 
-$ kubectl get pod -n single-pod
+$ kubectl get pod 
 NAME    READY   STATUS    RESTARTS   AGE
-nginx   1/1     Running   0          7s
+hello   1/1     Running   0          7s
 ```
-### 5. Describe POD
+### Describe POD
 ```bash
-$ kubectl describe pod hello-app -n single-pod
+$ kubectl describe pod hello 
 ```
-### 6. To access application 
+### To access application 
 
 - Connect to k8s master node
 - Obtain Pod IP from describe command   
 ```bash
 $ curl http://<pod-ip>:8080
-Nginx Html page
+hello Html page
 ```
 
 ### 7. Delete Pod
 ```bash
-$ kubectl delete pod nginx -n single-pod
-pod "nginx" deleted
+$ kubectl delete pod hello 
+pod "hello" deleted
 ```
 
 ## Deploy single pod on Openshift/k8s using Manifest
 
-### 1. Create new project single-pod
+### Create pod using manifest file 
 ```bash
-$ kubectl create ns single-pod
-```
-### 2. Create pod using manifest file 
-```bash
-# generate pod menifest 
+# generate pod manifest 
 $ kubectl run hello-app --image=openshift/hello-openshift --restart=Never --dry-run -o yaml > single-pod.yaml
 
 # create pod
-$ kubectl create -f single-pod.yml -n single-pod
+$ kubectl create -f single-pod.yml 
 pod/hello-app created
 ```
-### 3. Get Pod
+### Get Pod
 ```bash
-$ kubectl get pods -n single-pod
+$ kubectl get pods 
 NAME        READY   STATUS    RESTARTS   AGE
 hello-app   1/1     Running   0          32s
 ```
-### 4. Describe POD
+### Describe POD
 ```bash
-$ kubectl describe pod hello-app -n single-pod
+$ kubectl describe pod hello-app 
 ```
-### 5. To access application 
+### To access application 
 
 - Connect to k8s master node
 - Obtain Pod IP from describe command   
@@ -72,8 +63,15 @@ $ curl http://<pod-ip>:8080
 Hello Openshift
 ```
 
-### 6. Delete Pod
+### Delete Pod
 ```bash
-$ kubectl delete -f single-pod.yml -n single-pod
+$ kubectl delete -f single-pod.yml 
+pod "hello-app" deleted
+```
+
+
+### Delete All
+```bash
+$ kubectl delete all --all
 pod "hello-app" deleted
 ```
