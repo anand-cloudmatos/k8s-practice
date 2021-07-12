@@ -3,7 +3,7 @@
 
 ### Create pod and service
 ```
-$ kubectl create -f .\app.yml 
+$ kubectl create -f app.yml 
 pod/hello-pod created
 service/hello-nodeport created
 ```

@@ -2,7 +2,7 @@
 
 ### Create pod
 ```bash
-$ kubectl create -f .\pod.yml 
+$ kubectl create -f pod.yml 
   pod/hello-pod created
 ```
 
@@ -15,7 +15,7 @@ hello-pod   1/1     Running   0          11s
 
 ### Create Service
 ``` bash
-$ kubectl create -f .\service.yml     
+$ kubectl create -f service.yml     
 service/hello-svc created
 ```
 
@@ -59,9 +59,9 @@ Hello OpenShift!!
 
 ### Create Service 2
 ```
-$ kubectl create -f .\service.yml                                                                                    
+$ kubectl create -f service.yml                                                                                    
 service/hello-svc2 created
-Error from server (AlreadyExists): error when creating ".\\service.yml": services "hello-svc" already exists
+Error from server (AlreadyExists): error when creating "\service.yml": services "hello-svc" already exists
 ```
 
 
