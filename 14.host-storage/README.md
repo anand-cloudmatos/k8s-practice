@@ -12,9 +12,9 @@ $ sudo mkdir /tmp/data
 ```bash
 # This again assumes that your Node uses "sudo" to run commands
 # as the superuser
-$ echo 'Hello from Kubernetes storage' > /mnt/data/index.html
+$ echo 'Hello from Kubernetes storage' > /tmp/data/index.html
 
-$ cat /mnt/data/index.html
+$ cat /tmp/data/index.html
 ```
 
 ### Create a PersistentVolume 
