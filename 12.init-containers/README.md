@@ -13,7 +13,6 @@ $ kubectl get pod
 ### Access Application
 ```bash
 $ curl http://<minikube-ip>:80
-Hello from Kubernetes storage
 ```
 
 ### Delete All
