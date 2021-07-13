@@ -5,14 +5,14 @@
 ```bash
 # This assumes that your Node uses "sudo" to run commands
 # as the superuser
-$ sudo mkdir /mnt/data
+$ sudo mkdir /tmp/data
 ```
 
 ### create index.html
 ```bash
 # This again assumes that your Node uses "sudo" to run commands
 # as the superuser
-$ sudo sh -c "echo 'Hello from Kubernetes storage' > /mnt/data/index.html"
+$ echo 'Hello from Kubernetes storage' > /mnt/data/index.html
 
 $ cat /mnt/data/index.html
 ```
