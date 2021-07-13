@@ -55,7 +55,7 @@ spec:
     # Simple sidecar: display log files using nginx.
     # In reality, this sidecar would be a custom image
     # that uploads logs to a third-party or storage service.
-    image: nginx:1.7.9
+    image: nginx:alpine
     ports:
       - containerPort: 80
 
