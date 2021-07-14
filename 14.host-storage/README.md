@@ -5,7 +5,7 @@
 ```bash
 # This assumes that your Node uses "sudo" to run commands
 # as the superuser
-$ sudo mkdir /tmp/data
+$ mkdir /tmp/data
 ```
 
 ### create index.html

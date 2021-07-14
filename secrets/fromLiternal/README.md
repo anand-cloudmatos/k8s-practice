@@ -41,4 +41,3 @@ Access application using <minikube-ip>:<nodeport>
 ```bash
 $ kubectl delete all --all
 ```
-
