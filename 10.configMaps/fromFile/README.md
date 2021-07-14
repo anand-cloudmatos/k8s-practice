@@ -105,7 +105,7 @@ service/color-app exposed
 ```
 
 ###  Accees application
-Access application using http://<minikube-ip>:<nodeport>/read_file
+Access application using http://minikube-ip:nodeport/read_file
 
 ### Delete All
 ```bash

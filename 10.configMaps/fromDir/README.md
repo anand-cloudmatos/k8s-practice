@@ -67,9 +67,9 @@ service/color-app exposed
 
 ### Accees application
 Hit route url in Browser - You will observer following things
- - using URL : http://<minikube-ip>:<nodeport>
+ - using URL : http://minikube-ip:nodeport
   HTML RED color Page, because in config map value of APP_COLOR is RED
- - using URL : http://<minikube-ip>:<nodeport>/read_file
+ - using URL : http://minikube-ip:nodeport/read_file
   HTML Red color Page with text_file.txt content in text area
 
 
