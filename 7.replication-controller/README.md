@@ -92,6 +92,15 @@ $ kubectl get all
 No resources found in replication-control namespace.
 ```
 
+### Expose service for rc
+```bash
+$  kubectl expose rc hello-rc
+$  kubectl get svc
+$  kubectl get svc hello-rc -o yaml
+$  curl <service-ip>:8080
+
+```
+
 
 ### Delete All
 ```bash
