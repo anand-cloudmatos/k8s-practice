@@ -46,7 +46,27 @@ NAME                               DESIRED   CURRENT   READY   AGE
 replicaset.apps/nginx-58f688455d   2         2         2       14s
 ```
 
+### Rollback
+```bash
+# update dployment.yam with openshift/hello-openshift
+$ kubectl apply -f deployment.yml 
+deployment.apps/nginx created
+service/nginx unchanged
+
+$ kubectl get svc
+
+$ curl <service-ip>:8080
+curl: (7) Failed connect to 10.98.250.31:8080; Connection refused
+
+$ kubectl rollout undo deployment nginx
+
+$ curl <service-ip>:8080
+Welcome to nigix
+```
+
+
 ### Delete All
 ```bash
 $ kubectl delete all --all
 ```
+
