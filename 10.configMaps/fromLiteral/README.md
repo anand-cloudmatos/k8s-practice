@@ -9,9 +9,11 @@ pod/color-app   0/1     ContainerCreating   0          12s
 
 NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
 service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   5m7s
+
 $ kubectl get po
 NAME        READY   STATUS                       RESTARTS   AGE
 color-app   0/1     CreateContainerConfigError   0          20s
+
 $ kubectl describe pod color-app
 Name:         color-app
 Namespace:    default
@@ -96,13 +98,12 @@ pod/color-app created
 
 ### create service
 ```bash
-$ kubectl expose pod/color-app 
+$ kubectl expose pod/color-app  --type=NodePort
 service/color-app exposed
 ```
 
 ###  Accees application
-- using URL : color-app-config-map-from-literals.2886795320-80-cykoria05.environments.katacoda 
-  HTML RED color Page, because in config map value of APP_COLOR is RED
+Access application using <minikube-ip>:<nodeport>
 
   ### Delete All
 ```bash
