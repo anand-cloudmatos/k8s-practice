@@ -109,5 +109,6 @@ Access application using http://minikube-ip:nodeport/read_file
 
 ### Delete All
 ```bash
+$ kubectl delete secrets color-secret
 $ kubectl delete all --all
 ```

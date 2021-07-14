@@ -107,5 +107,6 @@ Access application using <minikube-ip>:<nodeport>
 
   ### Delete All
 ```bash
+$ kubectl delete secrets color-secret-file
 $ kubectl delete all --all
 ```
