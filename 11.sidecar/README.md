@@ -7,12 +7,12 @@ $ kubectl apply -f pod.yaml
 
 ### GET POD
 ```bash
-$ kubectl get pod
+$ kubectl get pod -o wide
 ```
 
 ### Access Application
 ```bash
-$ curl http://<minikube-ip>:80
+$ curl http://<pod-ip>:80/app.txt
 ```
 
 ### Delete All
