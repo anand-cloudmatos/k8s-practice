@@ -8,14 +8,14 @@ configmap/color-secret-file created
 
 ### Get configMap secret-from-file 
 ```bash
-$ kubectl get configmap 
+$ kubectl get secret 
 NAME                    DATA   AGE
 color-secret-file   1      16s
 ```
 
 ### Describe secret-from-file
 ```bash
-$ kubectl describe configmap color-secret-file 
+$ kubectl describe secret color-secret-file 
 
 ```
 
@@ -68,7 +68,7 @@ Conditions:
   PodScheduled      True
 Volumes:
   config:
-    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Type:      Secret (a volume populated by a Secret)
     Name:      color-secret-file
     Optional:  false
   default-token-x8n26:
