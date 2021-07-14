@@ -20,6 +20,3 @@ spec:
     - name: config
       configMap:
         name: color-config-map-dir
-        # items:
-        #     - key: testfile.txt
-        #       path: testfile.txt

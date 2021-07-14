@@ -58,18 +58,18 @@ $ kubectl apply -f pod.yml
 pod/color-app created
 ```
 
-### Create service
+### create service
 ```bash
-$ kubectl expose pod color-app 
+$ kubectl expose pod/color-app  --type=NodePort
 service/color-app exposed
 ```
 
 
 ### Accees application
 Hit route url in Browser - You will observer following things
- - using URL : color-app-config-map-from-dir.2886795276-80-host18nc.environments.katacoda 
+ - using URL : http://<minikube-ip>:<nodeport>
   HTML RED color Page, because in config map value of APP_COLOR is RED
- - using URL : color-app-config-map-from-dir.2886795276-80-host18nc.environments.katacoda/read_file
+ - using URL : http://<minikube-ip>:<nodeport>/read_file
   HTML Red color Page with text_file.txt content in text area
 
 
