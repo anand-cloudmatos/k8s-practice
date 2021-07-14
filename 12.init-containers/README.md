@@ -12,7 +12,7 @@ $ kubectl get pod
 
 ### Access Application
 ```bash
-$ curl http://<minikube-ip>:80
+$ curl http://<pod-ip>:80
 ```
 
 ### Delete All
