@@ -38,7 +38,7 @@ pod "hello" deleted
 ### Create pod using manifest file 
 ```bash
 # generate pod manifest 
-$ kubectl run hello-app --image=openshift/hello-openshift --restart=Never --dry-run -o yaml > single-pod.yaml
+$ kubectl run hello-app --image=openshift/hello-openshift --restart=Never --dry-run=client -o yaml > single-pod.yaml
 
 # create pod
 $ kubectl create -f single-pod.yml 
