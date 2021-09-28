@@ -6,11 +6,19 @@ $ curl -LO https://storage.googleapis.com/minikube/releases/v1.16.0/minikube-lin
 $ chmod +x minikube-linux-amd64
 $ sudo mv minikube-linux-amd64 /usr/local/bin/minikube
 ```
+### Prerequisite 
+```bash
+$ yum install conntrack
+$ hostname minikube
+$ systemctl enable docker.service
+$ sudo echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
+
+```
 
 ### install K8S minikube server
 ```bash
 $ minikube version
-$ yum install conntrack
+
 $ minikube start --driver=none
 ```
 ### Install Kubectl cli if kubectl command not found
