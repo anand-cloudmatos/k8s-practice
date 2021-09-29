@@ -17,4 +17,4 @@ spec:
         - name: API_URL
           # <service_name>.<service_project>: <service_port>
           # <service_project> is used when POD running on different PRoject/Namespace
-          value: api-server.multi-pod-service:$(API_SERVER_SERVICE_PORT) 
+          value: api-server.$(API_SERVER_SERVICE_HOST):$(API_SERVER_SERVICE_PORT) 
