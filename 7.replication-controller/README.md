@@ -3,7 +3,7 @@
 
 ### Create and Get replication-controller Object
 ```bash
-$ kubectl get -f rc.yml 
+$ kubectl apply -f rc.yml 
 $ kubectl get rc 
 NAME       DESIRED   CURRENT   READY   AGE
 hello-rc   3         3         1       1m
