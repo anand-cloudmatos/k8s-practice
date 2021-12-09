@@ -1,4 +1,4 @@
-## Create Namespace Openshift/k8s using kubectl run
+## Namespace in Openshift/k8s using kubectl run
 
 ### List all namespaces using kubectl run command
 ```bash
