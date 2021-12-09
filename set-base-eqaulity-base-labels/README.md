@@ -53,6 +53,7 @@ hello   1/1     Running   0          3m16s   app=hello,env=dev,tier=frontend
 
 ### Delete Pod
 ```bash
-$ kubectl delete po hello 
+$ kubectl delete all --all 
 pod "hello" deleted
+pod "nginx" deleted
 ```
