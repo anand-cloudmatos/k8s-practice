@@ -1,4 +1,4 @@
-## Labels in Openshift/k8s using kubectl run
+## Labels in Openshift/k8s
 
 ### Create POD with label app=hello
 ```bash

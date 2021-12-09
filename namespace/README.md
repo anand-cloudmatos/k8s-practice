@@ -1,6 +1,6 @@
-## Namespace in Openshift/k8s using kubectl run
+## Namespace in Openshift/k8s
 
-### List all namespaces using kubectl run command
+### List all namespaces
 ```bash
 $ kubectl get ns 
 ```
@@ -40,7 +40,7 @@ $ kubectl run hello --image=openshift/hello-openshift -n my-ns
 $ kubectl get po -n my-ns
 ```
 
-### 7. Delete Pod
+### Delete Pod
 ```bash
 $ kubectl delete po hello -n my-ns
 pod "hello" deleted
