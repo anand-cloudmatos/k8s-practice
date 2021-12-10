@@ -18,6 +18,26 @@ color-secret-file   1      16s
 $ kubectl describe secret color-secret-file 
 
 ```
+### Get secret YAML
+```bash
+$ kubectl get secrets color-secret-file -o yaml
+apiVersion: v1
+data:
+  testfile.txt: SGVsbG8gIC0gc2VjcmV0IGZyb20gRmlsZQoK
+kind: Secret
+metadata:
+  creationTimestamp: "2021-12-10T03:35:33Z"
+  name: color-secret-file
+  namespace: default
+  resourceVersion: "123848"
+  uid: aed34003-e80e-46de-86da-6ca716f717db
+type: Opaque
+```
+
+### Decode secret
+```bash
+echo SGVsbG8gIC0gc2VjcmV0IGZyb20gRmlsZQoK | base64 -d
+```
 
 ### Create POD
 ```bash
@@ -87,9 +107,11 @@ Events:
   Normal  Created    <invalid>  kubelet, master    Created container
   Normal  Started    <invalid>  kubelet, master    Started container
 ```
+
 ### Check secret file in POD
 ```bash
-kubectl exec -i -t color-app -- ls /data 
+$ kubectl exec -i -t color-app -- ls /data 
+$ kubectl exec -i -t color-app -- cat /data/testfile.txt
 ```
 
 ### create service
