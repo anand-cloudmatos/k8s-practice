@@ -87,6 +87,10 @@ Events:
   Normal  Created    <invalid>  kubelet, master    Created container
   Normal  Started    <invalid>  kubelet, master    Started container
 ```
+### Check secret file in POD
+```bash
+kubectl exec -i -t color-app -- ls /data 
+```
 
 ### create service
 ```bash
