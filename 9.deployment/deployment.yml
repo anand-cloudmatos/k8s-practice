@@ -22,7 +22,7 @@ spec:
         - name: nginx
           image: nginx:1.9.1
           ports:
-            - containerPort:  80
+            - containerPort: 80
 ---
 
 apiVersion: v1
